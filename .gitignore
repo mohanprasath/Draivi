@@ -1,0 +1,24 @@
+# Ignore Composer dependencies
+vendor/
+
+# Ignore compiled PHP files
+*.php~
+*.pyc
+*.pyo
+
+# Ignore PHPUnit result logs
+phpunit.xml
+phpunit.xml.dist
+
+# Ignore Laravel specific files
+Homestead.yaml
+Homestead.json
+.env.testing
+
+# Ignore Symfony specific files
+/app/config/parameters.yml
+/var/
+/vendor/
+/bin/
+/cache/
+/logs/
