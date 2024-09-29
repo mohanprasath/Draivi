@@ -1,0 +1,13 @@
+{
+    "name": "draivi/project",
+    "description": "Draivi Backend Test Project",
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.20",
+        "guzzlehttp/guzzle": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

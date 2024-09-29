@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        table, th, td { border: 1px solid black; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        button { margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+<h1>Product List</h1>
+
+<!-- Buttons -->
+<button id="listBtn">List Products</button>
+<button id="clearAllBtn">Clear All Products</button>
+
+<!-- Product table -->
+<table id="productTable">
+    <thead>
+    <tr>
+        <th>Product Number</th>
+        <th>Name</th>
+        <th>Bottle Size</th>
+        <th>Price</th>
+        <th>Price (GBP)</th>
+        <th>Order Amount</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    // Function to fetch and list products
+    function listProducts() {
+        fetch('api/list.php')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#productTable tbody');
+                tableBody.innerHTML = ''; // Clear existing table content
+
+                data.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td>${product.number}</td>
+                    <td>${product.name}</td>
+                    <td>${product.bottlesize}</td>
+                    <td>${product.price}</td>
+                    <td>${product.priceGBP}</td>
+                    <td>${product.orderamount}</td>
+                    <td>
+                        <button onclick="updateOrder(${product.number}, 'add')">Add</button>
+                        <button onclick="updateOrder(${product.number}, 'clear')">Clear</button>
+                    </td>
+                `;
+                    tableBody.appendChild(row);
+                });
+            });
+    }
+
+    // Function to update the order amount for a specific product
+    function updateOrder(productId, operation) {
+        fetch('api/update.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `id=${productId}&operation=${operation}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    listProducts(); // Refresh the product list after update
+                } else {
+                    alert('Failed to update order');
+                }
+            });
+    }
+
+    // Function to clear the order amount for all products
+    function clearAllProducts() {
+        fetch('api/clearAll.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    listProducts(); // Refresh the product list after clearing all orders
+                    alert('All products cleared successfully!');
+                } else {
+                    alert('Failed to clear products');
+                }
+            });
+    }
+
+    // Add event listeners to buttons
+    document.getElementById('listBtn').addEventListener('click', listProducts);
+    document.getElementById('clearAllBtn').addEventListener('click', clearAllProducts);
+
+    // Load products when the page loads
+    listProducts();
+</script>
+
+</body>
+</html>

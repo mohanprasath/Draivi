@@ -1,0 +1,1 @@
+0 2 * * * /usr/bin/php /PROJECT_PATH/src/FetchData.php
